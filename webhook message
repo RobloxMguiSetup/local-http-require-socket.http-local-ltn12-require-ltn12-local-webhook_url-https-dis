@@ -1,0 +1,26 @@
+local http = require("socket.http")
+local ltn12 = require("ltn12")
+
+local webhook_url = "https://discord.com/api/webhooks/1069805756007858218/cJZQtDxur2J1wm85X1j5oCaOqxrHEOhRHIHXpkUVr4GhDXA3PyPrJHgcJGBcoDJX4Ici"
+local message = {
+    content = "@..player.Name.. https://imgur.com/N4K2TZA that's also the bot picture LOL :sob: ",
+    username = "! CrazyNoob#7829 was here",
+    avatar_url = "https://imgur.com/N4K2TZA"
+}
+
+local response_body = {}
+local result, response_code, response_headers = http.request{
+    url = webhook_url,
+    method = "POST",
+    headers = {
+        ["Content-Type"] = "application/json"
+    },
+    source = ltn12.source.string(cjson.encode(message)),
+    sink = ltn12.sink.table(response_body)
+}
+
+if response_code ~= 204 then
+    print("An error occurred while sending the webhook: " .. response_body[1])
+else
+    print("Webhook sent successfully.")
+end
